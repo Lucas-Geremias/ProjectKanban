@@ -2,12 +2,20 @@ package com.av2.kanban.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+
 
 @Entity
 public class Project {
@@ -15,13 +23,22 @@ public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank(message = "Project Name is required")
 	private String projectName;
+	@NotBlank(message = "Project Identifier is required")
+	@Size(min = 4, max = 5, message = "Please use 4 to 5 Characters!")
+	@Column(updatable = false, unique = true)
 	private String projectIdentifier;
+	@NotBlank(message = "Project description is required")
 	private String description;
+	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date start_date;
+	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date end_date;
 	
+	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date created_At;
+	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date updated_At;
 	
 	public Project() {
