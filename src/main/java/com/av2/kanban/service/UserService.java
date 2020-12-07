@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.av2.kanban.domain.User;
+import com.av2.kanban.domain.exceptions.UsernameAlreadyExistsException;
 import com.av2.kanban.repositories.UserRepository;
 
 @Service
@@ -16,8 +17,19 @@ public class UserService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	public User  savUser(User newUser) {
-		newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-		return userRepository.save(newUser);
-	}
+	public User saveUser (User newUser){
+
+        try{
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+
+            newUser.setUsername(newUser.getUsername());
+            // Make sure that password and confirmPassword match
+            // We don't persist or show the confirmPassword
+            return userRepository.save(newUser);
+
+        }catch (Exception e){
+            throw new UsernameAlreadyExistsException("Username '"+newUser.getUsername()+"' already exists");
+        }
+
+    }
 }
