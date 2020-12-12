@@ -1,10 +1,10 @@
 package com.av2.kanban.security;
 
-
-import com.av2.kanban.domain.User;
 import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import com.av2.kanban.domain.User;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ public class JwtTokenProvider {
                 .compact();
         }
 
+    //Validate the token
     public boolean validateToken(String token){
         try{
             Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
